@@ -1,9 +1,18 @@
 <template>
     <div class="clear-content">
-        <p>Bạn có <strong>3</strong> công việc cần hoàn thành</p>
+        <p>Bạn có <strong>{{ total ?? 0 }}</strong> công việc cần hoàn thành</p>
         <span>Xóa tất cả</span>
     </div>
 </template>
+
+<script>
+
+    export default {
+        props: ["total"]
+    }
+
+</script>
+
 <style scoped>
 .clear-content {
     width: 100%;

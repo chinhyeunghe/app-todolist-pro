@@ -3,11 +3,11 @@
         <form action="">
             <h3>Todo App</h3>
             <!-- Component Form Add Job  -->
-             <FormAdd></FormAdd>
+             <FormAdd @add-task="addTask"></FormAdd>
             <!-- Component List Task  -->
-            <TaskList></TaskList>
+            <TaskList @delete-item="myDeleteTask" :tasks="tasks"></TaskList>
             <!-- Component total job  -->
-             <TotalJob></TotalJob>
+             <TotalJob :total="totalJob"></TotalJob>
         </form>
     </div>
 </template>
@@ -17,6 +17,7 @@
 import TaskList from '@/components/todo/TaskList.vue';
 import FormAdd from '@/components/todo/FormAdd.vue';
 import TotalJob from '@/components/todo/TotalJob.vue';
+import { reactive, ref } from 'vue';
 
 export default {
 
@@ -24,6 +25,39 @@ export default {
         TaskList,
         FormAdd,
         TotalJob
+    },
+
+    setup() {
+
+        const tasks = reactive([]);
+
+        let totalJob = ref(0);
+
+
+        const getTotalJob = () => {
+            return tasks.length;
+        }
+
+        const addTask = (task) => { 
+            tasks.push({id: Date.now(), name: task, completed: false});
+            totalJob.value = getTotalJob();
+        }
+
+
+        const myDeleteTask = (id) => {
+            
+            const index = tasks.findIndex((item) => {
+             return item.id === id
+            });
+
+            if(index !== -1) {
+
+                tasks.splice(index, 1);
+                totalJob.value = getTotalJob();
+            }
+        }
+
+        return {tasks, totalJob, addTask, myDeleteTask}
     }
 }
 </script>
