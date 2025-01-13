@@ -3,11 +3,18 @@
         <form action="">
             <h3>Todo App</h3>
             <!-- Component Form Add Job  -->
-             <FormAdd @add-task="addTask"></FormAdd>
+            <Fragment v-if="displayFormEdit === false">
+                <FormAdd @add-task="addTask"></FormAdd>
+            </Fragment>
+            <Fragment v-if="displayFormEdit">
+                <FormEdit @edit-submit="editTask" :itemEdit="itemEdit"></FormEdit>
+            </Fragment>
+
             <!-- Component List Task  -->
-            <TaskList @delete-item="myDeleteTask" :tasks="tasks"></TaskList>
+            <TaskList v-if="displayFormEdit === false" @delete-item="myDeleteTask" @edit-item="myEditTask"
+                :tasks="tasks"></TaskList>
             <!-- Component total job  -->
-             <TotalJob :total="totalJob"></TotalJob>
+            <TotalJob :total="totalJob"></TotalJob>
         </form>
     </div>
 </template>
@@ -17,47 +24,89 @@
 import TaskList from '@/components/todo/TaskList.vue';
 import FormAdd from '@/components/todo/FormAdd.vue';
 import TotalJob from '@/components/todo/TotalJob.vue';
-import { reactive, ref } from 'vue';
+import { Fragment, reactive, ref } from 'vue';
+import FormEdit from '@/components/todo/FormEdit.vue';
 
 export default {
 
     components: {
         TaskList,
         FormAdd,
-        TotalJob
+        TotalJob,
+        FormEdit
     },
 
     setup() {
+
+        // trạng thái phản ứng ẩn hiện form add || edit
+
+        const displayFormEdit = ref(false);
 
         const tasks = reactive([]);
 
         let totalJob = ref(0);
 
+        let itemEdit = reactive({});
 
         const getTotalJob = () => {
             return tasks.length;
         }
 
-        const addTask = (task) => { 
-            tasks.push({id: Date.now(), name: task, completed: false});
+        const addTask = (task) => {
+            tasks.push({ id: Date.now(), name: task, completed: false });
             totalJob.value = getTotalJob();
         }
 
 
         const myDeleteTask = (id) => {
-            
-            const index = tasks.findIndex((item) => {
-             return item.id === id
-            });
 
-            if(index !== -1) {
+            if (confirm("❗Bạn có chắc muốn xóa Item này?")) {
 
-                tasks.splice(index, 1);
-                totalJob.value = getTotalJob();
+                const index = tasks.findIndex((item) => {
+                    return item.id === id
+                });
+
+                if (index !== -1) {
+
+                    tasks.splice(index, 1);
+                    totalJob.value = getTotalJob();
+                }
+
             }
         }
 
-        return {tasks, totalJob, addTask, myDeleteTask}
+        const myEditTask = (id) => {
+
+            displayFormEdit.value = true;
+            // tìm index object
+            const index = tasks.findIndex((item) => {
+                return item.id === id;
+            })
+
+            // lấy item
+            const itemJob = tasks[index];
+
+            // điền công việc lên input edit
+            itemEdit.id = itemJob.id;
+            itemEdit.name = itemJob.name;
+
+            // 
+        }
+
+        const editTask = (itemEdit) => {
+
+            const index = tasks.findIndex((item) => {
+                return item.id === itemEdit.id;
+            })
+
+            // cập nhật
+            tasks[index]["name"] = itemEdit.name;
+            // đóng form edit
+            displayFormEdit.value = false;
+
+        }
+
+        return { tasks, totalJob, addTask, myDeleteTask, displayFormEdit, myEditTask, itemEdit, editTask }
     }
 }
 </script>
@@ -98,5 +147,4 @@ form h3 {
     text-align: center;
     padding: 20px 30px;
 }
-
 </style>
