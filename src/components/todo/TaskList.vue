@@ -1,6 +1,6 @@
 <template>
     <div class="list-jobs">
-        <TaskItem v-for="task in tasks" :key="task.id" :task="task" @my-edit="$emit('edit-item', task.id)" @my-delete="$emit('delete-item', task.id)"></TaskItem>
+        <TaskItem v-for="task in tasks" :key="task.id" :task="task" @my-edit="$emit('edit-item', task.id)" @my-delete="$emit('delete-item', task.id)" @my-check="$emit('check-item', task.id)"></TaskItem>
     </div>
 </template>
 

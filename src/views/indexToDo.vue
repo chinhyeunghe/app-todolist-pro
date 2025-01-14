@@ -11,7 +11,7 @@
             </Fragment>
 
             <!-- Component List Task  -->
-            <TaskList v-if="displayFormEdit === false" @delete-item="myDeleteTask" @edit-item="myEditTask"
+            <TaskList v-if="displayFormEdit === false" @delete-item="myDeleteTask" @edit-item="myEditTask" @check-item="myCheckTask"
                 :tasks="tasks"></TaskList>
             <!-- Component total job  -->
             <TotalJob :total="totalJob" @delete-all="handleDeleteAll"></TotalJob>
@@ -49,14 +49,19 @@ export default {
         let itemEdit = reactive({});
 
         const getTotalJob = () => {
-            return tasks.length;
+            
+          let taskCount = tasks.filter((item) => {
+
+                return item.completed !== true;
+            })
+        
+            return taskCount.length;
         }
 
         const addTask = (task) => {
             tasks.push({ id: Date.now(), name: task, completed: false });
             totalJob.value = getTotalJob();
         }
-
 
         const myDeleteTask = (id) => {
 
@@ -106,17 +111,39 @@ export default {
 
         }
 
+        // hoàn thành công việc
+
+        const myCheckTask = (id) => {
+
+           // thay đổi trạng thái completed cho đối tượng
+
+           const index = tasks.findIndex((item) => {
+
+                return item.id === id;
+           })
+
+           if(index !== -1) {
+            tasks[index]["completed"] = true;
+            totalJob.value = getTotalJob();
+                
+           }
+           
+        }
+
         // Xóa tất cả công việc
 
         const handleDeleteAll = () => {
 
-            if(confirm("Bạn muốn xóa hết công việc")) {
-                totalJob.value = 0;
-                return tasks.length = 0
+            if (tasks.length > 0) {
+                if (confirm("Bạn muốn xóa hết công việc")) {
+                    totalJob.value = 0;
+                    return tasks.length = 0
+                }
             }
+
         }
 
-        return { tasks, totalJob, addTask, myDeleteTask, displayFormEdit, myEditTask, itemEdit, editTask,  handleDeleteAll}
+        return { tasks, totalJob, addTask, myDeleteTask, displayFormEdit, myEditTask, itemEdit, editTask, handleDeleteAll, myCheckTask }
     }
 }
 </script>
