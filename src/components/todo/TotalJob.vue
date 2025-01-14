@@ -1,7 +1,7 @@
 <template>
     <div class="clear-content">
         <p>Bạn có <strong>{{ total ?? 0 }}</strong> công việc cần hoàn thành</p>
-        <span>Xóa tất cả</span>
+        <span @click="$emit('delete-all')">Xóa tất cả</span>
     </div>
 </template>
 
@@ -28,7 +28,7 @@
 
 .clear-content span {
     padding: 3px 15px;
-    background-color: #2ecc71;
+    background-color: #e74c3c;
     border-radius: 5px;
     font-weight: 500;
     margin: 0 15px;

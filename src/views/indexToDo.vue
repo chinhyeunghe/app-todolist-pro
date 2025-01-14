@@ -14,7 +14,7 @@
             <TaskList v-if="displayFormEdit === false" @delete-item="myDeleteTask" @edit-item="myEditTask"
                 :tasks="tasks"></TaskList>
             <!-- Component total job  -->
-            <TotalJob :total="totalJob"></TotalJob>
+            <TotalJob :total="totalJob" @delete-all="handleDeleteAll"></TotalJob>
         </form>
     </div>
 </template>
@@ -106,7 +106,17 @@ export default {
 
         }
 
-        return { tasks, totalJob, addTask, myDeleteTask, displayFormEdit, myEditTask, itemEdit, editTask }
+        // Xóa tất cả công việc
+
+        const handleDeleteAll = () => {
+
+            if(confirm("Bạn muốn xóa hết công việc")) {
+                totalJob.value = 0;
+                return tasks.length = 0
+            }
+        }
+
+        return { tasks, totalJob, addTask, myDeleteTask, displayFormEdit, myEditTask, itemEdit, editTask,  handleDeleteAll}
     }
 }
 </script>

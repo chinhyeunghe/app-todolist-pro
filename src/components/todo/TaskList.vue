@@ -11,7 +11,15 @@ export default {
     components: {
         TaskItem
     },
-    props: ["tasks"]
+    props: ["tasks"],
+
+    setup(props) {
+
+        const getTasks = () => {
+
+            return props.tasks.reverse();
+        }
+    }
 
 
 }
@@ -21,5 +29,34 @@ export default {
 .list-jobs {
     width: 100%;
     padding: 10px 30px;
+    height: 300px;
+    overflow: auto;
+}
+
+/* Tùy chỉnh phần track của scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  /* Độ rộng của scrollbar */
+  height: 12px;
+  /* Chiều cao của scrollbar ngang */
+}
+
+/* Tùy chỉnh phần background của scrollbar (track) */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+  /* Border-radius cho track */
+}
+
+/* Tùy chỉnh thanh trượt của scrollbar (thumb) */
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(#81ecec, #3498db) !important;
+  border-radius: 10px;
+  /* Border-radius cho thanh trượt */
+}
+
+/* Khi hover lên scrollbar */
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(#81ecec, #3498db) !important;
 }
 </style>
