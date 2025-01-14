@@ -11,8 +11,8 @@
             </Fragment>
 
             <!-- Component List Task  -->
-            <TaskList v-if="displayFormEdit === false" @delete-item="myDeleteTask" @edit-item="myEditTask" @check-item="myCheckTask"
-                :tasks="tasks"></TaskList>
+            <TaskList v-if="displayFormEdit === false" @delete-item="myDeleteTask" @edit-item="myEditTask"
+                @check-item="myCheckTask" :tasks="tasks"></TaskList>
             <!-- Component total job  -->
             <TotalJob :total="totalJob" @delete-all="handleDeleteAll"></TotalJob>
         </form>
@@ -49,12 +49,12 @@ export default {
         let itemEdit = reactive({});
 
         const getTotalJob = () => {
-            
-          let taskCount = tasks.filter((item) => {
+
+            let taskCount = tasks.filter((item) => {
 
                 return item.completed !== true;
             })
-        
+
             return taskCount.length;
         }
 
@@ -115,19 +115,19 @@ export default {
 
         const myCheckTask = (id) => {
 
-           // thay đổi trạng thái completed cho đối tượng
+            // thay đổi trạng thái completed cho đối tượng
 
-           const index = tasks.findIndex((item) => {
+            const index = tasks.findIndex((item) => {
 
                 return item.id === id;
-           })
+            })
 
-           if(index !== -1) {
-            tasks[index]["completed"] = true;
-            totalJob.value = getTotalJob();
-                
-           }
-           
+            if (index !== -1) {
+                tasks[index]["completed"] = true;
+                totalJob.value = getTotalJob();
+
+            }
+
         }
 
         // Xóa tất cả công việc
